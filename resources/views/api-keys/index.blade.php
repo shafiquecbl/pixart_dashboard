@@ -28,7 +28,8 @@
                 'progress' => 15
             ]
         ]"
-        createButtonText="Generate key" />
+        createButtonText="Generate key"
+        createButtonModal="create-api-key" />
 
     <x-data-table
         :tabs="[
@@ -71,4 +72,37 @@
                 'calls' => '234'
             ]
         ]" />
+
+    <x-create-api-key-form />
+
+    @push('scripts')
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('apiKeyForm', () => ({
+                show: false,
+                init() {
+                    this.$watch('show', value => {
+                        if (value) {
+                            document.body.classList.add('overflow-y-hidden');
+                        } else {
+                            document.body.classList.remove('overflow-y-hidden');
+                        }
+                    });
+                }
+            }));
+        });
+
+        // Handle create button click
+        document.addEventListener('DOMContentLoaded', () => {
+            const createButton = document.querySelector('button:contains("Generate key")');
+            if (createButton) {
+                createButton.addEventListener('click', () => {
+                    window.dispatchEvent(new CustomEvent('open-modal', {
+                        detail: 'create-api-key'
+                    }));
+                });
+            }
+        });
+    </script>
+    @endpush
 </x-app-layout>

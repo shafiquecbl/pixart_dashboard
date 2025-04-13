@@ -1,4 +1,4 @@
-@props(['title', 'subtitle' => '', 'stats' => [], 'createButtonText' => null])
+@props(['title', 'subtitle' => '', 'stats' => [], 'createButtonText' => null, 'createButtonModal' => null])
 
 <div class="flex items-center justify-between mb-6">
     <div>
@@ -20,7 +20,10 @@
             </button>
         </div>
         @if($createButtonText)
-        <button class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
+        <button
+            x-data
+            @click="$dispatch('open-modal', '{{ $createButtonModal }}')"
+            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
             {{ $createButtonText }}
         </button>
         @endif

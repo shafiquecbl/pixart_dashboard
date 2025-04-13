@@ -28,7 +28,8 @@
                 'progress' => 90
             ]
         ]"
-        createButtonText="Create ad" />
+        createButtonText="Create ad"
+        createButtonModal="create-ad" />
 
     <x-data-table
         :tabs="[
@@ -72,4 +73,37 @@
                 'budget' => '$2,500'
             ]
         ]" />
+
+    <x-create-ad-form />
+
+    @push('scripts')
+    <script>
+        document.addEventListener('alpine:init', () => {
+            Alpine.data('adForm', () => ({
+                show: false,
+                init() {
+                    this.$watch('show', value => {
+                        if (value) {
+                            document.body.classList.add('overflow-y-hidden');
+                        } else {
+                            document.body.classList.remove('overflow-y-hidden');
+                        }
+                    });
+                }
+            }));
+        });
+
+        // Handle create button click
+        document.addEventListener('DOMContentLoaded', () => {
+            const createButton = document.querySelector('button:contains("Create ad")');
+            if (createButton) {
+                createButton.addEventListener('click', () => {
+                    window.dispatchEvent(new CustomEvent('open-modal', {
+                        detail: 'create-ad'
+                    }));
+                });
+            }
+        });
+    </script>
+    @endpush
 </x-app-layout>
